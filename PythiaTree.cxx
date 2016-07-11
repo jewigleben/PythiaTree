@@ -99,9 +99,9 @@ Int_t main(int argc, char **argv) {
     // pythia.init(2212, 2212,2760.);
     
     // RHIC initialization.
-    pythia.settings.mode("Beams:idA = 2212");
-    pythia.settings.mode("Beams:idB = 2212");
-    pythia.settings.parm("Beams:eCM = 200.");
+    pythia.settings.mode("Beams:idA", 2212);
+    pythia.settings.mode("Beams:idB", 2212);
+    pythia.settings.parm("Beams:eCM", 200.);
     pythia.init();
     
     // Set up tree
