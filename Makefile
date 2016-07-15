@@ -1,6 +1,7 @@
 os = $(shell uname -s)
 
-INCFLAGS      = -I$(ROOTSYS)/include/root -I$(PYTHIA8DIR)/include 
+INCFLAGS      = -I$(ROOTSYS)/include -I$(PYTHIA8)/include/Pythia8 -I$(PYTHIA8)/include -I$(FASTJET)/include
+
 ifeq ($(os),Linux)
 CXXFLAGS      = -lrt -Wl,--no-as-needed -lHist -lCore -lMathCore
 else
@@ -18,9 +19,8 @@ LDFLAGSS      = -flat_namespace -undefined suppress
 LDFLAGSSS     = -bundle
 endif
 
-
 ifeq ($(os),Linux)
-CXX          = g++
+CXX          = g++ -std=c++11
 else
 CXX          = clang
 endif
@@ -28,8 +28,8 @@ endif
 
 ROOTLIBS      = $(shell root-config --libs)
 
-LIBPATH       = $(ROOTLIBS) -L$(PYTHIA8DIR)/lib 
-LIBS          = -lpythia8 -ldl
+LIBPATH       = $(ROOTLIBS) -L$(PYTHIA8LIB) -L$(FASTJETLIB)
+LIBS          = -lpythia8 -lfastjet -lfastjetplugins -lfastjettools -lsiscone -lsiscone_spherical -ldl -lgfortran
 
 # for cleanup
 SDIR          = src
@@ -47,16 +47,15 @@ INCS = $(SDIR)/PythiaTree.h
 $(ODIR)/%.o : $(SDIR)/%.cxx $(INCS)
 	@echo 
 	@echo COMPILING
-	$(CXX) $(INCFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(INCFLAGS) -c $< -o $@
 
-$(BDIR)/%  : $(ODIR)/%.o 
+$(BDIR)/%  : $(ODIR)/%.o
 	@echo 
 	@echo LINKING
-	$(CXX) $^ -o $@ $(INCFLAGS) $(LDFLAGS) $(CXXFLAGS) $(LIBPATH) $(LIBS)
+	$(CXX) $(LDFLAGS) $(LIBPATH) $(LIBS) $^ -o $@
 ###############################################################################
 
 ###############################################################################
 ############################# Main Targets ####################################
 ###############################################################################
-all    : $(BDIR)/PythiaTree  $(BDIR)  $(BDIR)/makeHistosPythiaTree    
-
+all    : $(BDIR)/PythiaTree  $(BDIR)  $(BDIR)/makeHistosPythiaTree   $(BDIR)/readPythiaTree
