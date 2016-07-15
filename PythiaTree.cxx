@@ -1,4 +1,4 @@
-#include "Pythia8/Pythia.h"
+#include "Pythia.h"
 
 #include <iostream>
 #include <string>
@@ -63,7 +63,7 @@ Int_t main(int argc, char **argv) {
     Float_t ptHatMax=100.0;
     
     //Points to location of Pythia 8
-    Pythia pythia("/home/justin/pythia8215/share/Pythia8/xmldoc");
+    Pythia pythia("/home/justin/pythia8219/share/Pythia8/xmldoc");
     Event& event = pythia.event;
 
     // Process selection.
@@ -123,7 +123,7 @@ Int_t main(int argc, char **argv) {
     //select a certain type of event.  So we want to be able to set the number
     //of selected events (nEvent)
     int nEv = 0;
-    Int_t nEvent = 100;
+    Int_t nEvent = 5000;
     
     do {
         if (!pythia.next()) continue;
